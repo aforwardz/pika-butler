@@ -21,7 +21,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 logger = logging.getLogger(__name__)
 
 
-class Wukong(object):
+class Pika(object):
 
     _profiling = False
     _debug = False
@@ -100,7 +100,7 @@ class Wukong(object):
     def help(self):
         print(
             """=====================================================================================
-    python3 wukong.py [命令]
+    python3 pika.py [命令]
     可选命令：
       md5                      - 用于计算字符串的 md5 值，常用于密码设置
       update                   - 手动更新 wukong-robot
@@ -184,10 +184,10 @@ class Wukong(object):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        wukong = Wukong()
-        wukong.run()
+        pika = Pika()
+        pika.run()
     elif "-h" in (sys.argv):
-        wukong = Wukong()
-        wukong.help()
+        pika = Pika()
+        pika.help()
     else:
-        fire.Fire(Wukong)
+        fire.Fire(Pika)
