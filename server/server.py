@@ -24,7 +24,7 @@ from tools import make_json, solr_tools
 
 logger = logging.getLogger(__name__)
 
-conversation, wukong = None, None
+conversation, pika = None, None
 commiting = False
 
 suggestions = [
@@ -57,7 +57,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
-        global conversation, wukong, suggestions
+        global conversation, pika, suggestions
         if not self.isValidated():
             self.redirect("/login")
             return
@@ -239,7 +239,7 @@ class LogPageHandler(BaseHandler):
 
 class OperateHandler(BaseHandler):
     def post(self):
-        global wukong
+        global pika
         if self.validate(self.get_argument("validate", default=None)):
             type = self.get_argument("type")
             if type in ["restart", "0"]:
@@ -247,7 +247,7 @@ class OperateHandler(BaseHandler):
                 self.write(json.dumps(res))
                 self.finish()
                 time.sleep(3)
-                wukong.restart()
+                pika.restart()
             else:
                 res = {"code": 1, "message": f"illegal type {type}"}
                 self.write(json.dumps(res))
@@ -386,14 +386,14 @@ class APIHandler(BaseHandler):
 
 class UpdateHandler(BaseHandler):
     def post(self):
-        global wukong
+        global pika
         if self.validate(self.get_argument("validate", default=None)):
-            if wukong.update():
+            if pika.update():
                 res = {"code": 0, "message": "ok"}
                 self.write(json.dumps(res))
                 self.finish()
                 time.sleep(3)
-                wukong.restart()
+                pika.restart()
             else:
                 res = {"code": 1, "message": "更新失败，请手动更新"}
                 self.write(json.dumps(res))
@@ -480,10 +480,10 @@ application = tornado.web.Application(
 )
 
 
-def start_server(con, wk):
-    global conversation, wukong
+def start_server(con, pk):
+    global conversation, pika
     conversation = con
-    wukong = wk
+    pika = pk
     if config.get("/server/enable", False):
         port = config.get("/server/port", "5001")
         try:
@@ -494,7 +494,7 @@ def start_server(con, wk):
             logger.critical(f"服务器启动失败: {e}", stack_info=True)
 
 
-def run(conversation, wukong, debug=False):
+def run(conversation, pika, debug=False):
     settings["debug"] = debug
-    t = threading.Thread(target=lambda: start_server(conversation, wukong))
+    t = threading.Thread(target=lambda: start_server(conversation, pika))
     t.start()
