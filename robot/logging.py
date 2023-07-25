@@ -58,7 +58,7 @@ def getLogger(name):
 
     # FileHandler
     file_handler = RotatingFileHandler(
-        os.path.join(constants.TEMP_PATH, "wukong.log"),
+        os.path.join(constants.TEMP_PATH, "pika.log"),
         maxBytes=1024 * 1024,
         backupCount=5,
     )
@@ -76,7 +76,7 @@ def readLog(lines=200):
     :param lines: 最大的行数
     :returns: 最新指定行数的 log
     """
-    log_path = os.path.join(constants.TEMP_PATH, "wukong.log")
+    log_path = os.path.join(constants.TEMP_PATH, "pika.log")
     if os.path.exists(log_path):
         return tail(log_path, lines)
     return ""

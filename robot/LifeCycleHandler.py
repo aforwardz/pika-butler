@@ -166,7 +166,7 @@ class LifeCycleHandler(object):
         唤醒并进入录音的状态
         """
         logger.info("onWakeup")
-        self._beep_hi(onCompleted=onCompleted)
+        # self._beep_hi(onCompleted=onCompleted)
         if config.get("/LED/enable", False):
             LED.wakeup()
         self._unihiker and self._unihiker.record(1, "我正在聆听...")
