@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from aip import AipSpeech
-from .sdk import TencentSpeech, AliSpeech, XunfeiSpeech, BaiduSpeech
+from .sdk import TencentSpeech, AliSpeech, XunfeiSpeech, BaiduSpeech, Espnet2ASR
 from . import utils, config
 from robot import logging
 from abc import ABCMeta, abstractmethod
@@ -242,6 +242,33 @@ class WhisperASR(AbstractASR):
                 return ""
         logger.critical(f"{self.SLUG} 语音识别出错了", stack_info=True)
         return ""
+
+
+class EspnetASR(AbstractASR):
+    """
+    Espnet2 的 asr 识别
+
+    """
+
+    SLUG = "espnet"
+
+    def __init__(self, **args):
+        super(self.__class__, self).__init__()
+        self.espnet = Espnet2ASR.Espnet2ASR()
+
+    @classmethod
+    def get_config(cls):
+        # Try to get ali_yuyin config from config
+        return config.get("espnet", {})
+
+    def transcribe(self, fp):
+        result = self.espnet.asr(fp)
+        if result:
+            logger.info(f"{self.SLUG} 语音识别到了：{result}")
+            return result
+        else:
+            logger.critical(f"{self.SLUG} 语音识别出错了", stack_info=True)
+            return ""
 
 
 def get_engine_by_slug(slug=None):

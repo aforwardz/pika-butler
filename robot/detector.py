@@ -93,7 +93,7 @@ def initDetector(wukong):
     else:
         logger.info("使用 snowboy 进行离线唤醒")
         detector and detector.terminate()
-        models = constants.getHotwordModel(config.get("hotword", "wukong.pmdl"))
+        models = constants.getHotwordModel(config.get("hotword", "pika.pmdl"))
         detector = snowboydecoder.HotwordDetector(
             models, sensitivity=config.get("sensitivity", 0.5)
         )
