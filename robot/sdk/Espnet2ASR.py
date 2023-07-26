@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 import librosa
-from robot.pks.espnet2.bin.asr_inference import Speech2Text
+from espnet2.bin.asr_inference import Speech2Text
 from robot import logging
 
 logger = logging.getLogger(__name__)
