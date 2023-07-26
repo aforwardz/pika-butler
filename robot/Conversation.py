@@ -113,9 +113,9 @@ class Conversation(object):
     def reInit(self):
         """重新初始化"""
         try:
-            self.asr = ASR.get_engine_by_slug(config.get("asr_engine", "tencent-asr"))
+            self.asr = ASR.get_engine_by_slug(config.get("asr_engine", "espnet"))
             self.ai = AI.get_robot_by_slug(config.get("robot", "tuling"))
-            self.tts = TTS.get_engine_by_slug(config.get("tts_engine", "baidu-tts"))
+            self.tts = TTS.get_engine_by_slug(config.get("tts_engine", "VITS"))
             self.nlu = NLU.get_engine_by_slug(config.get("nlu_engine", "unit"))
             self.player = Player.SoxPlayer()
             self.brain = Brain(self)

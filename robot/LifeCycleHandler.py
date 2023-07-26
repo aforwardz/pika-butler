@@ -177,7 +177,7 @@ class LifeCycleHandler(object):
         录音结束并进入思考的状态
         """
         logger.info("onThink")
-        self._beep_lo()
+        # self._beep_lo()
         self._unihiker and self._unihiker.think()
         self._unihiker and self._unihiker.record(1, "我正在思考...")
         if config.get("/LED/enable", False):

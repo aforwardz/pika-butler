@@ -10,7 +10,7 @@ recorder = None
 porcupine = None
 
 
-def initDetector(wukong):
+def initDetector(pika):
     """
     初始化离线唤醒热词监听器，支持 snowboy 和 porcupine 两大引擎
     """
@@ -55,11 +55,11 @@ def initDetector(wukong):
                             ),
                         )
                     )
-                    wukong._detected_callback(False)
+                    pika._detected_callback(False)
                     recorder.stop()
-                    wukong.conversation.interrupt()
-                    query = wukong.conversation.activeListen()
-                    wukong.conversation.doResponse(query)
+                    pika.conversation.interrupt()
+                    query = pika.conversation.activeListen()
+                    pika.conversation.doResponse(query)
                     recorder.start()
         except pvporcupine.PorcupineActivationError as e:
             logger.error("[Porcupine] AccessKey activation error", stack_info=True)
@@ -99,11 +99,11 @@ def initDetector(wukong):
         )
         # main loop
         try:
-            callbacks = wukong._detected_callback
+            callbacks = pika._detected_callback
             detector.start(
                 detected_callback=callbacks,
-                audio_recorder_callback=wukong.conversation.converse,
-                interrupt_check=wukong._interrupt_callback,
+                audio_recorder_callback=pika.conversation.converse,
+                interrupt_check=pika._interrupt_callback,
                 silent_count_threshold=config.get("silent_threshold", 15),
                 recording_timeout=config.get("recording_timeout", 5) * 4,
                 sleep_time=0.03,

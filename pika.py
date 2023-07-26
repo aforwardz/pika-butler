@@ -79,6 +79,7 @@ class Pika(object):
             utils.setRecordable(False)
         self.lifeCycleHandler.onWakeup()
         if is_snowboy:
+            # self.conversation.say(f"老公，我在~")
             _start_record()
 
     def _interrupt_callback(self):

@@ -37,3 +37,15 @@ ps：以上对我来说不算劣势
 - [ ] 更优雅的天气播报
 - [ ] 更优雅的定时任务
 - [ ] 赛事播报
+
+
+## 记录
+### vits-simple-api
+按照说明安装，模型只下了原神（**不玩原神！**）的模型，因为感觉雷电将军的御姐音好听，在config文件里配置好speaker id就行
+
+### espnet2
+多种方式安装尝试发现直接pip安装也ok，不需要源码编译
+```shell
+pip install espnet
+```
+安装好后环境包里会有espnet2，另外需安装espnet-model-zoo
