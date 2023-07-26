@@ -29,7 +29,7 @@ ps：以上对我来说不算劣势
 - [x] 本地化TTS服务（使用[vits-simple-api](https://github.com/Artrajz/vits-simple-api)解决）
 - [x] 本地化ASR服务（使用[espnet](https://github.com/espnet/espnet)解决, 模型采用pengcheng_guo大佬基于wenetspeech数据集训练的[模型](https://huggingface.co/espnet/pengcheng_guo_wenetspeech_asr_train_asr_raw_zh_char)）
 - [ ] 本地化NLU服务
-- [ ] 本地化Chat服务（接入ChatGLM2）
+- [x] 本地化Chat服务（接入ChatGLM2）
 - [ ] ASR识别说话对象
 - [ ] 使用自己的模型合成语音
 
