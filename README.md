@@ -40,6 +40,11 @@ ps：以上对我来说不算劣势
 
 
 ## 记录
+[官方文档](https://wukong.hahack.com/#/README)对于大部分问题都有记录，很详细
+
+### 训练唤醒词
+按照文档使用snowboy离线训练服务训练一个自己的唤醒词模型，导出pdml文件放在指定目录即可
+
 ### vits-simple-api
 按照说明安装，模型只下了原神（**不玩原神！**）的模型，因为感觉雷电将军的御姐音好听，在config文件里配置好speaker id就行
 
@@ -49,3 +54,10 @@ ps：以上对我来说不算劣势
 pip install espnet
 ```
 安装好后环境包里会有espnet2，另外需安装espnet-model-zoo
+
+### chatglm2
+根据[ChatGLM2-6B](https://github.com/THUDM/ChatGLM2-6B)部署， 运行其open_api.py启动类似openai接口的服务
+
+### 消除回声
+测试时发现回答播放的语音又会被麦克风录入，导致自己无限对话，安装[消除回声](https://wukong.hahack.com/#/tips?id=_32%ef%bc%9a%e5%bc%80%e5%90%af%e5%9b%9e%e5%a3%b0%e6%b6%88%e9%99%a4)文档消除回声
+
