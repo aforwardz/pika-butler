@@ -23,7 +23,7 @@ class MatchDay(object):
     }
 
     def __init__(self):
-        self.today = datetime.today().date()
+        self.today = datetime(2023, 9, 4).date() # datetime.today().date()
 
     def handle(self):
         pass
@@ -152,14 +152,14 @@ class MatchDay(object):
                             hl = p.find('strong')
                             if hl:
                                 hl = hl.text.strip().strip('↓')
-                                if hl.startswith('【'):
+                                if not hl or hl.startswith('【'):
                                     continue
                                 match['highlights'].append(hl)
             except Exception as e:
                 traceback.print_exc()
                 print(e)
 
-        with open('./temp/match_day_%s.json' % self.today.strftime('%Y%m%d'), 'w', encoding='utf-8') as f:
+        with open('../temp/match_day_%s.json' % self.today.strftime('%Y%m%d'), 'w', encoding='utf-8') as f:
             json.dump(match_records, f)
 
         return match_records

@@ -30,7 +30,7 @@ ps：以上对我来说不算劣势
 - [x] 本地化ASR服务（使用[espnet](https://github.com/espnet/espnet)解决, 模型采用pengcheng_guo大佬基于wenetspeech数据集训练的[模型](https://huggingface.co/espnet/pengcheng_guo_wenetspeech_asr_train_asr_raw_zh_char)）
 - [ ] 本地化NLU服务
 - [x] 本地化Chat服务（接入ChatGLM2）
-- [ ] ASR识别说话对象
+- [ ] 说话对象识别（声纹识别）
 - [ ] 使用自己的模型合成语音
 
 ### FEATURES:
@@ -61,3 +61,8 @@ pip install espnet
 ### 消除回声
 测试时发现回答播放的语音又会被麦克风录入，导致自己无限对话，安装[消除回声](https://wukong.hahack.com/#/tips?id=_32%ef%bc%9a%e5%bc%80%e5%90%af%e5%9b%9e%e5%a3%b0%e6%b6%88%e9%99%a4)文档消除回声
 
+### 声纹识别
+使用[VoiceprintRecognition](https://github.com/yeyupiaoling/VoiceprintRecognition-Pytorch)进行声纹识别
+
+### 人脸识别
+使用[face_recognition](https://github.com/ageitgey/face_recognition/)进行人脸识别，经测试，效果很不错
