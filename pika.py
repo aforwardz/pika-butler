@@ -40,6 +40,12 @@ class Pika(object):
 *     https://github.com/wzpan/wukong-robot.git        *
 ********************************************************
 
+********************************************************
+*          Pika-robot - 二创版本                       *
+*          (c) 2025 Aforwardz <aforwardzyu@gmail.com>  *
+*     https://github.com/aforwardz/pika-butler.git      *
+********************************************************
+
             后台管理端：http://{}:{}
             如需退出，可以按 Ctrl-4 组合键
 

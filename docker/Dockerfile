@@ -47,4 +47,4 @@ RUN wget https://wzpan-1253537070.cos.ap-guangzhou.myqcloud.com/misc/snowboy.tar
 EXPOSE 5001
 
 # 设置 ENTRYPOINT
-ENTRYPOINT ["python", "wukong.py"]
+ENTRYPOINT ["python", "pika.py"]
