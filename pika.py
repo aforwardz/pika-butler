@@ -8,7 +8,7 @@ import hashlib
 import urllib3
 
 from robot.Updater import Updater
-from robot.Conversation import Conversation
+from robot.Conversation import Conversation, SimpleConversation
 from robot.LifeCycleHandler import LifeCycleHandler
 
 from robot import config, utils, constants, logging, detector
@@ -58,7 +58,8 @@ class Pika(object):
             )
         )
 
-        self.conversation = Conversation(self._profiling)
+        # self.conversation = Conversation(self._profiling)
+        self.conversation = SimpleConversation(self._profiling)
         self.conversation.say(f"{config.get('first_name', '主人')} 你好！试试对我喊唤醒词叫醒我吧", True)
         self.lifeCycleHandler = LifeCycleHandler(self.conversation)
         self.lifeCycleHandler.onInit()
