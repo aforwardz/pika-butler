@@ -57,12 +57,12 @@ class LifeCycleHandler(object):
         # 加载历史提醒
         self._read_reminders()
 
-        # 行空板
-        self._init_unihiker()
-        # LED 灯
-        self._init_LED()
-        # Muse 头环
-        self._init_muse()
+        # # 行空板
+        # self._init_unihiker()
+        # # LED 灯
+        # self._init_LED()
+        # # Muse 头环
+        # self._init_muse()
 
     def _read_reminders(self):
         logger.info("重新加载提醒信息")

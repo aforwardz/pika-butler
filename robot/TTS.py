@@ -17,7 +17,7 @@ from pathlib import Path
 from pypinyin import lazy_pinyin
 from pydub import AudioSegment
 from abc import ABCMeta, abstractmethod
-from .sdk import TencentSpeech, AliSpeech, XunfeiSpeech, atc, VITSClient
+from .sdk import TencentSpeech, AliSpeech, XunfeiSpeech, atc, VITSClient, SoVITSClient
 import requests
 from xml.etree import ElementTree
 
@@ -375,7 +375,6 @@ class EdgeTTS(AbstractTTS):
         event_loop.close()
         return tmpfile
         
-            
 
 class MacTTS(AbstractTTS):
     """
@@ -409,6 +408,7 @@ class MacTTS(AbstractTTS):
         else:
             logger.critical(f"{self.SLUG} 合成失败！", stack_info=True)
 
+
 class VITS(AbstractTTS):
     """
     VITS 语音合成
@@ -440,6 +440,51 @@ class VITS(AbstractTTS):
         tmpfile = utils.write_temp_file(result, ".wav")
         logger.info(f"{self.SLUG} 语音合成成功，合成路径：{tmpfile}")
         return tmpfile
+
+
+class GPT_SoVITS(AbstractTTS):
+    """
+    GPT_SoVITS 语音合成，与VITS项目无关，本地服务
+
+    "text": "",                   # str.(required) text to be synthesized
+    "text_lang: "",               # str.(required) language of the text to be synthesized
+    "ref_audio_path": "",         # str.(required) reference audio path
+    "aux_ref_audio_paths": [],    # list.(optional) auxiliary reference audio paths for multi-speaker tone fusion
+    "prompt_text": "",            # str.(optional) prompt text for the reference audio
+    "prompt_lang": "",            # str.(required) language of the prompt text for the reference audio
+    "top_k": 5,                   # int. top k sampling
+    "top_p": 1,                   # float. top p sampling
+    "temperature": 1,             # float. temperature for sampling
+    "text_split_method": "cut0",  # str. text split method, see text_segmentation_method.py for details.
+    "batch_size": 1,              # int. batch size for inference
+    "batch_threshold": 0.75,      # float. threshold for batch splitting.
+    "split_bucket: True,          # bool. whether to split the batch into multiple buckets.
+    "speed_factor":1.0,           # float. control the speed of the synthesized audio.
+    "streaming_mode": False,      # bool. whether to return a streaming response.
+    "seed": -1,                   # int. random seed for reproducibility.
+    "parallel_infer": True,       # bool. whether to use parallel inference.
+    "repetition_penalty": 1.35    # float. repetition penalty for T2S model.
+    """
+
+    SLUG = "SoVITS"
+
+    def __init__(self, server_url, ref_audio_path, prompt_text, top_k, top_p, temperature, text_split_method, **args):
+        super(self.__class__, self).__init__()
+        self.server_url, self.ref_audio_path, self.prompt_text, self.top_k, self.top_p, self.temperature, self.text_split_method = (
+            server_url, ref_audio_path, prompt_text, top_k, top_p, temperature, text_split_method)
+        logger.info(f"{self.SLUG} 初始化完成^_^")
+
+    @classmethod
+    def get_config(cls):
+        return config.get("SoVITS", {})
+
+    def get_speech(self, phrase):
+        result = SoVITSClient.tts(phrase, self.server_url, self.ref_audio_path, self.prompt_text, self.top_k,
+                                  self.top_p, self.temperature, self.text_split_method)
+        tmpfile = utils.write_temp_file(result, ".wav")
+        logger.info(f"{self.SLUG} 语音合成成功，合成路径：{tmpfile}")
+        return tmpfile
+
 
 def get_engine_by_slug(slug=None):
     """

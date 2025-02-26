@@ -1,8 +1,8 @@
 # pika-butler
 ## 说明
 * 本项目基于[wukong-robot](https://github.com/wzpan/wukong-robot)项目3.5.3 版本（202307），感谢作者@wzpan 的开源
-* 因家庭需求以及个人职业相关，主要计划在asr、tts等engine模块使用自己训练和组建的服务（跑在家庭服务器上13900KF+4090）
-* 因此本项目代码继续开源，主要修改在于接入模块
+* 本项目目标：**完全离线版**wukong-robot，也是出于隐私保护的目的，主要计划在asr、tts等在线服务替换使用自己训练和组建的服务（跑在家庭服务器上）
+* 因此本项目代码继续开源，主要修改在于接入模块以及定制化功能
 
 ## 优势
 1. **注重个人隐私，不POST任何外网api**
@@ -11,7 +11,7 @@
 
 ## 劣势
 1. 需要本地服务器，性能越高越好
-2. 本地服务需要自己搭建，没有调API 
+2. 本地服务需要自己搭建
 
 ps：以上对我来说不算劣势
 
@@ -26,10 +26,12 @@ ps：以上对我来说不算劣势
 
 ### TODOS:
 - [x] 训练生成自定义离线唤醒词
+- [ ] 多音箱就近唤醒、就近播放
 - [x] 本地化TTS服务（使用[vits-simple-api](https://github.com/Artrajz/vits-simple-api)解决）
 - [x] 本地化ASR服务（使用[espnet](https://github.com/espnet/espnet)解决, 模型采用pengcheng_guo大佬基于wenetspeech数据集训练的[模型](https://huggingface.co/espnet/pengcheng_guo_wenetspeech_asr_train_asr_raw_zh_char)）
 - [ ] 本地化NLU服务
-- [x] 本地化Chat服务（接入ChatGLM2）
+- [x] ~~本地化Chat服务（接入ChatGLM2）~~
+- [ ] DeepSeek接入
 - [ ] 说话对象识别（声纹识别）
 - [ ] 使用自己的模型合成语音
 

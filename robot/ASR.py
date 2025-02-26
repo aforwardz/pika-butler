@@ -255,6 +255,7 @@ class EspnetASR(AbstractASR):
     def __init__(self, **args):
         super(self.__class__, self).__init__()
         self.espnet = Espnet2ASR.Espnet2ASR()
+        logger.info(f"{self.SLUG} 初始化完成^_^")
 
     @classmethod
     def get_config(cls):
