@@ -21,7 +21,7 @@ def tts(text, server_url, ref_audio_path, prompt_text, top_k, top_p, temperature
         "batch_size": 1,
         "batch_threshold": 0.75,
         "split_bucket": True,
-        "speed_factor": 1.0,
+        "speed_factor": 1.1,
         "streaming_mode": False,
         "seed": -1,
         "parallel_infer": True,

@@ -115,7 +115,7 @@ class Conversation(object):
     def reInit(self):
         """重新初始化"""
         try:
-            self.asr = ASR.get_engine_by_slug(config.get("asr_engine", "espnet"))
+            self.asr = ASR.get_engine_by_slug(config.get("asr_engine", "funasr"))
             self.ai = AI.get_robot_by_slug(config.get("robot", "deepseek"))
             self.tts = TTS.get_engine_by_slug(config.get("tts_engine", "SoVITS"))
             self.nlu = NLU.get_engine_by_slug(config.get("nlu_engine", "unit"))
@@ -123,6 +123,7 @@ class Conversation(object):
             self.brain = Brain(self)
             self.brain.printPlugins()
         except Exception as e:
+            print(traceback.format_exc())
             logger.critical(f"对话初始化失败：{e}", stack_info=True)
 
     def checkRestore(self):
@@ -167,7 +168,7 @@ class Conversation(object):
                 self.player.stop()
             else:
                 # 没命中技能，使用机器人回复
-                if self.ai.SLUG in ("openai", "chatglm2"):
+                if self.ai.SLUG in ("deepseek", "chatglm2"):
                     stream = self.ai.stream_chat(query)
                     self.stream_say(stream, True, onCompleted=self.checkRestore)
                 else:

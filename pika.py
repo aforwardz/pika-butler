@@ -59,7 +59,8 @@ class Pika(object):
         )
 
         self.conversation = Conversation(self._profiling)
-        self.conversation.say(f"{config.get('first_name', '主人')} 你好！试试对我喊唤醒词叫醒我吧", True)
+        day_part = utils.get_day_part()
+        self.conversation.say(f"{config.get('first_name', '主人')}，{day_part}好！快来唤醒我吧~", True)
         self.lifeCycleHandler = LifeCycleHandler(self.conversation)
         self.lifeCycleHandler.onInit()
 

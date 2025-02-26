@@ -10,6 +10,7 @@ import json
 import yaml
 import hashlib
 import subprocess
+from datetime import datetime
 from . import constants, config
 from robot import logging
 from pydub import AudioSegment
@@ -24,6 +25,25 @@ logger = logging.getLogger(__name__)
 
 do_not_bother = False
 is_recordable = True
+
+
+def get_day_part():
+    now_hour = datetime.now().hour
+
+    if now_hour <= 5:
+        return "凌晨"
+    elif now_hour <=8:
+        return "早上"
+    elif now_hour <=10:
+        return "上午"
+    elif now_hour <=12:
+        return "中午"
+    elif now_hour <=16:
+        return "下午"
+    elif now_hour <=18:
+        return "傍晚"
+    else:
+        return "晚上"
 
 
 def sendEmail(

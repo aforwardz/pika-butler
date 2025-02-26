@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from aip import AipSpeech
-from .sdk import TencentSpeech, AliSpeech, XunfeiSpeech, BaiduSpeech, Espnet2ASR
+from .sdk import TencentSpeech, AliSpeech, XunfeiSpeech, BaiduSpeech, Espnet2ASR, FunAsr
 from . import utils, config
 from robot import logging
 from abc import ABCMeta, abstractmethod
@@ -264,6 +264,33 @@ class EspnetASR(AbstractASR):
 
     def transcribe(self, fp):
         result = self.espnet.asr(fp)
+        if result:
+            logger.info(f"{self.SLUG} 语音识别到了：{result}")
+            return result
+        else:
+            logger.critical(f"{self.SLUG} 语音识别出错了", stack_info=True)
+            return ""
+
+class FunASR(AbstractASR):
+    """
+    FunASR 的 asr 识别
+
+    """
+
+    SLUG = "funasr"
+
+    def __init__(self, **args):
+        super(self.__class__, self).__init__()
+        self.funasr = FunAsr.FunAsr()
+        logger.info(f"{self.SLUG} 初始化完成^_^")
+
+    @classmethod
+    def get_config(cls):
+        # Try to get ali_yuyin config from config
+        return config.get("funasr", {})
+
+    def transcribe(self, fp):
+        result = self.funasr.asr(fp)
         if result:
             logger.info(f"{self.SLUG} 语音识别到了：{result}")
             return result

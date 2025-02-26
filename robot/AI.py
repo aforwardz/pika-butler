@@ -486,6 +486,151 @@ class ChatGLMRobot(AbstractRobot):
             return "抱歉，ChatGLM2 回答失败"
 
 
+class DeepSeekRobot(AbstractRobot):
+
+    SLUG = "deepseek"
+
+    def __init__(
+        self,
+        model,
+        prefix="",
+        api_base="",
+        skip_think=True
+    ):
+        """
+        DeepSeek机器人
+        """
+        super(self.__class__, self).__init__()
+        self.model = model
+        self.prefix = prefix
+        self.api_base = api_base if api_base else "http://127.0.0.1:11434"
+        self.skip_think = skip_think
+        self.context = []
+
+    @classmethod
+    def get_config(cls):
+        # Try to get anyq config from config
+        return config.get("deepseek", {})
+
+    def stream_chat(self, texts):
+        """
+        从DeepSeek API获取回复
+        :return: 回复
+        """
+
+        msg = "".join(texts)
+        msg = utils.stripPunctuation(msg)
+        msg = self.prefix + msg  # 增加一段前缀
+        logger.info("msg: " + msg)
+        # self.context.append({"role": "user", "content": msg})
+
+        header = {
+            "Content-Type": "application/json",
+        }
+
+        data = {"model": self.model, "prompt": msg, "stream": True}
+        logger.info("开始流式请求")
+        url = self.api_base + "/api/generate"
+        # 请求接收流式数据
+        try:
+            response = requests.request(
+                "POST",
+                url,
+                headers=header,
+                json=data,
+                stream=True,
+            )
+
+            def generate():
+                stream_content = str()
+                # one_message = {"role": "assistant", "content": stream_content}
+                # self.context.append(one_message)
+                i, skipping = 0, False
+                for line in response.iter_lines():
+                    line_str = str(line, encoding="utf-8")
+                    if line_str:
+                        line_json = json.loads(line_str)
+                        if line_json.get("done", False):
+                            break
+                        stream_resp = line_json.get("response", "")
+                        if self.skip_think and not skipping and stream_resp.startswith("<think>"):
+                            logger.info(f"思考中...")
+                            skipping = True
+                        if self.skip_think and skipping and stream_resp.startswith("</think>"):
+                            stream_resp = stream_resp.replace("</think>", "")
+                            skipping = False
+                        if skipping:
+                            # logger.info(f"思考中：{stream_resp}")
+                            continue
+                        tmp_clean_text = stream_resp.strip()
+                        if not tmp_clean_text:
+                            continue
+                        # if len(tmp_clean_text) <= 2:
+                        #     stream_content += stream_resp
+                        stream_content += stream_resp
+                        if tmp_clean_text[-1] in {'。', '；', '！'} or stream_resp[-1] == '\n' or len(stream_resp) > 8:
+                            delta_content = stream_content
+                            i += 1
+                            if i < 40:
+                                logger.debug(delta_content, end="")
+                            elif i == 40:
+                                logger.debug("......")
+                            stream_content = ""
+
+                            yield delta_content
+
+                    elif len(line_str.strip()) > 0:
+                        logger.debug(line_str)
+                        yield line_str
+
+        except Exception as e:
+            ee = e
+
+            def generate():
+                yield "request error:\n" + str(ee)
+
+        return generate
+
+    def chat(self, texts, parsed):
+        """
+        使用DeepSeek机器人聊天
+
+        Arguments:
+        texts -- user input, typically speech, to be parsed by a module
+        """
+        msg = "".join(texts)
+        msg = utils.stripPunctuation(msg)
+        msg = self.prefix + msg  # 增加一段前缀
+        logger.info("msg: " + msg)
+
+        header = {
+            "Content-Type": "application/json",
+        }
+
+        self.context.append({"role": "user", "content": msg})
+        data = {"model": self.model, "messages": self.context, "stream": False}
+        url = self.api_base + "/api/chat"
+        try:
+            respond = ""
+            response = requests.request(
+                "POST",
+                url,
+                headers=header,
+                json=data,
+            ).json()
+
+            message = response.message
+            respond = message.content
+            self.context.append(message)
+            return respond
+        except Exception:
+            logger.critical(
+                "deepseek robot failed to response for %r", msg, exc_info=True
+            )
+            self.context.pop()
+            return "抱歉，DeepSeek 回答失败"
+
+
 def get_unknown_response():
     """
     不知道怎么回答的情况下的答复

@@ -1,5 +1,5 @@
 import time
-
+import traceback
 from snowboy import snowboydecoder
 from robot import config, logging, utils, constants
 
@@ -93,9 +93,9 @@ def initDetector(pika):
     else:
         logger.info("使用 snowboy 进行离线唤醒")
         detector and detector.terminate()
-        models = constants.getHotwordModel(config.get("hotword", "pika.pmdl"))
+        models = constants.getHotwordModel(config.get("hotword", "link.pmdl"))
         detector = snowboydecoder.HotwordDetector(
-            models, sensitivity=config.get("sensitivity", 0.5)
+            models, sensitivity=config.get("sensitivity", 0.3)
         )
         # main loop
         try:
@@ -110,4 +110,5 @@ def initDetector(pika):
             )
             detector.terminate()
         except Exception as e:
+            print(traceback.format_exc())
             logger.critical(f"离线唤醒机制初始化失败：{e}", stack_info=True)

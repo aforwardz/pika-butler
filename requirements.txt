@@ -12,6 +12,7 @@ semver==2.8.1
 websocket==0.2.1
 websocket-client
 pypinyin
+PyAudio==0.2.12
 jieba
 pvporcupine
 pvrecorder
