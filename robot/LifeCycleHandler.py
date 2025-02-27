@@ -59,8 +59,8 @@ class LifeCycleHandler(object):
 
         # # 行空板
         # self._init_unihiker()
-        # # LED 灯
-        # self._init_LED()
+        # LED 灯
+        self._init_LED()
         # # Muse 头环
         # self._init_muse()
 

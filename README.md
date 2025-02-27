@@ -26,12 +26,15 @@ ps：以上对我来说不算劣势
 
 ### TODOS:
 - [x] 训练生成自定义离线唤醒词
-- [ ] 多音箱就近唤醒、就近播放
-- [x] 本地化TTS服务（使用[vits-simple-api](https://github.com/Artrajz/vits-simple-api)解决）
-- [x] 本地化ASR服务（使用[espnet](https://github.com/espnet/espnet)解决, 模型采用pengcheng_guo大佬基于wenetspeech数据集训练的[模型](https://huggingface.co/espnet/pengcheng_guo_wenetspeech_asr_train_asr_raw_zh_char)）
-- [ ] 本地化NLU服务
+- [x] ~~本地化TTS服务（使用[vits-simple-api](https://github.com/Artrajz/vits-simple-api)解决）~~
+- [x] 本地化TTS服务（使用[GPT-SoVITS](https://github.com/RVC-Boss/GPT-SoVITS)解决）
+- [x] ~~本地化ASR服务（使用[espnet](https://github.com/espnet/espnet)解决, 模型采用pengcheng_guo大佬基于wenetspeech数据集训练的[模型](https://huggingface.co/espnet/pengcheng_guo_wenetspeech_asr_train_asr_raw_zh_char)）~~
+- [x] 本地化ASR服务（使用[FunASR](https://github.com/modelscope/FunASR)解决, 模型采用阿里达摩院的中文通用识别[模型](https://www.modelscope.cn/models/iic/speech_paraformer_asr_nat-zh-cn-16k-common-vocab8358-tensorflow1)）
 - [x] ~~本地化Chat服务（接入ChatGLM2）~~
-- [ ] DeepSeek接入
+- [x] DeepSeek接入
+- [ ] 本地化NLU服务（考虑使用大模型）
+- [ ] 常用指令功能
+- [ ] 多音箱就近唤醒、就近播放
 - [ ] 说话对象识别（声纹识别）
 - [ ] 使用自己的模型合成语音
 
@@ -49,18 +52,18 @@ ps：以上对我来说不算劣势
 ### 训练唤醒词
 按照文档使用snowboy离线训练服务训练一个自己的唤醒词模型，导出pdml文件放在指定目录即可
 
-### vits-simple-api
-按照说明安装，模型只下了原神（**不玩原神！**）的模型，因为感觉雷电将军的御姐音好听，在config文件里配置好speaker id就行
+### ~~vits-simple-api~~
+~~按照说明安装，模型只下了原神（**不玩原神！**）的模型，因为感觉雷电将军的御姐音好听，在config文件里配置好speaker id就行~~
 
-### espnet2
-多种方式安装尝试发现直接pip安装也ok，不需要源码编译
-```shell
-pip install espnet
-```
-安装好后环境包里会有espnet2，另外需安装espnet-model-zoo
+### ~~espnet2~~
+~~多种方式安装尝试发现直接pip安装也ok，不需要源码编译~~
 
-### chatglm2
-根据[ChatGLM2-6B](https://github.com/THUDM/ChatGLM2-6B)部署， 运行其open_api.py启动类似openai接口的服务
+~~pip install espnet~~
+
+~~安装好后环境包里会有espnet2，另外需安装espnet-model-zoo~~
+
+### ~~chatglm2~~
+~~根据[ChatGLM2-6B](https://github.com/THUDM/ChatGLM2-6B)部署， 运行其open_api.py启动类似openai接口的服务~~
 
 ### 消除回声
 测试时发现回答播放的语音又会被麦克风录入，导致自己无限对话，安装[消除回声](https://wukong.hahack.com/#/tips?id=_32%ef%bc%9a%e5%bc%80%e5%90%af%e5%9b%9e%e5%a3%b0%e6%b6%88%e9%99%a4)文档消除回声
@@ -76,3 +79,18 @@ pip install espnet
 先略过语音部分，使用WIFI并支持TTS的喇叭进行流程实验
 
 计划接入DeepSeek，替换ChatGLM2
+
+### 【2025.02.27】
+进行了TTS和ASR方案替换和接入，测试通过
+
+本地部署DeepSeek R1 32B并接入，实测全流程效果达到初步预期，全服务均为本地
+
+### GPT-SoVITS
+按照说明安装，过程有部分坑，安装好后启动api服务
+
+### FunASR
+按照说明安装，并下载识别模型，代码里通过AutoModel调用
+
+### DeepSeek
+通过Ollama本地部署（需要再加两根内存条）
+

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .sdk import unit
+from .sdk import unit, LLM2NLU
 from robot import logging
 from abc import ABCMeta, abstractmethod
 
@@ -190,6 +190,93 @@ class UnitNLU(AbstractNLU):
         :param parsed: UNIT 解析结果
         :param intent: 意图的名称
         :returns: UNIT 的回复文本
+        """
+        return unit.getSay(parsed, intent)
+
+
+class LLMNLU(AbstractNLU):
+    """
+    基于大模型的NLU.
+    """
+
+    SLUG = "llm_nlu"
+
+    def __init__(self):
+        super(self.__class__, self).__init__()
+
+    @classmethod
+    def get_config(cls):
+        """
+
+        无需配置，所以返回 {}
+        """
+        return {}
+
+    def parse(self, query, **args):
+
+        return LLM2NLU.getNLU(
+            query, args["api_base"], args["model"]
+        )
+
+    def getIntent(self, parsed):
+        """
+        提取意图
+
+        :param parsed: 解析结果
+        :returns: 意图数组
+        """
+        return unit.getIntent(parsed)
+
+    def hasIntent(self, parsed, intent):
+        """
+        判断是否包含某个意图
+
+        :param parsed: 解析结果
+        :param intent: 意图的名称
+        :returns: True: 包含; False: 不包含
+        """
+        return unit.hasIntent(parsed, intent)
+
+    def getSlots(self, parsed, intent):
+        """
+        提取某个意图的所有词槽
+
+        :param parsed: 解析结果
+        :param intent: 意图的名称
+        :returns: 词槽列表。你可以通过 name 属性筛选词槽，
+        再通过 normalized_word 属性取出相应的值
+        """
+        return unit.getSlots(parsed, intent)
+
+    def getSlotWords(self, parsed, intent, name):
+        """
+        找出命中某个词槽的内容
+
+        :param parsed: 解析结果
+        :param intent: 意图的名称
+        :param name: 词槽名
+        :returns: 命中该词槽的值的列表。
+        """
+        return unit.getSlotWords(parsed, intent, name)
+
+    def getSlotOriginalWords(self, parsed, intent, name):
+        """
+        找出命中某个词槽的原始内容
+
+        :param parsed: 解析结果
+        :param intent: 意图的名称
+        :param name: 词槽名
+        :returns: 命中该词槽的值的列表。
+        """
+        return unit.getSlotOriginalWords(parsed, intent, name)
+
+    def getSay(self, parsed, intent):
+        """
+        提取 LLM NLU 的回复文本
+
+        :param parsed: 解析结果
+        :param intent: 意图的名称
+        :returns: 的回复文本
         """
         return unit.getSay(parsed, intent)
 
